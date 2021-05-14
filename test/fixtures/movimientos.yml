@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  importe: 9.99
+  fecha_hora: 2021-05-14
+  cuenta: one
+
+two:
+  importe: 9.99
+  fecha_hora: 2021-05-14
+  cuenta: two
