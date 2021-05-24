@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :movements
+  resources :accounts
+  resources :users
   resources :movimientos
   resources :cuenta
   resources :usuarios
