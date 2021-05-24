@@ -20,14 +20,6 @@ ActiveRecord::Schema.define(version: 2021_05_24_142243) do
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
-  create_table "cuenta", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.decimal "saldo", precision: 8, scale: 2
-    t.bigint "usuario_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["usuario_id"], name: "index_cuenta_on_usuario_id"
-  end
-
   create_table "movements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.decimal "balance", precision: 8, scale: 2
     t.date "when"
@@ -35,15 +27,6 @@ ActiveRecord::Schema.define(version: 2021_05_24_142243) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_movements_on_account_id"
-  end
-
-  create_table "movimientos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.decimal "importe", precision: 8, scale: 2
-    t.date "fecha_hora"
-    t.bigint "cuenta_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["cuenta_id"], name: "index_movimientos_on_cuenta_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -54,16 +37,6 @@ ActiveRecord::Schema.define(version: 2021_05_24_142243) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  create_table "usuarios", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "email"
-    t.string "password"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_usuarios_on_email", unique: true
-  end
-
   add_foreign_key "accounts", "users"
-  add_foreign_key "cuenta", "usuarios"
   add_foreign_key "movements", "accounts"
-  add_foreign_key "movimientos", "cuenta", column: "cuenta_id"
 end
