@@ -19,10 +19,10 @@ module AuthenticationHelper
             emailParams    = params["email"]
             passwordParams =  params["password"]
 
-            @user = User.find_by(email: emailParams)
+            user = User.find_by(email: emailParams)
 
-            if (@user!=nil)
-                passwordUser = @user.password
+            if (user!=nil)
+                passwordUser = user.password
                 
                 if ( passwordParams == passwordUser )
                   return true
@@ -44,6 +44,10 @@ module AuthenticationHelper
             header  = request.headers['Authorization']
             token   = header.gsub(pattern, '') if header && header.match(pattern)
 
+            if ( !token )
+                return nil 
+            end
+            
             email   = token.chomp(@@secret)
             return email
         end

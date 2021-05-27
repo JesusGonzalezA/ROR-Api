@@ -39,7 +39,13 @@ module Api
       # PATCH/PUT /users/id /users/id
       def update
         email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
         user = User.find_by(email: email)
+
 
         if ( user_params["email"] != nil )
           email = user_params["email"]
@@ -62,6 +68,12 @@ module Api
       # DELETE /users/1 or /users/1.json
       def destroy
         email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
         user = User.find_by(email: email)
         if user.destroy
           render json: :nothing, status: :ok
