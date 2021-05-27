@@ -6,7 +6,7 @@ module Api
 
       skip_before_action :verify_authenticity_token
       # GET /users or /users.json
-      def index  
+      def login  
         isPasswordCorrect = AuthenticationHelper::Auth.instance.checkPassword( request.body )
         params      = JSON.parse( request.body.read )
         emailParams = params["email"]
