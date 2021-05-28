@@ -5,46 +5,118 @@ module Api
       skip_before_action :verify_authenticity_token
       # GET /accounts or /accounts.json
       def index
-        render json: Account.all, status: :ok
+        email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
+        user = User.find_by(email: email)
+        if ( user )
+          accounts = Account.where(user_id: user["id"])
+          render json: accounts, status: :ok
+        else
+          render json: :nothing, status: :unprocessable_entity
+        end
       end
 
       # GET /accounts/1 or /accounts/1.json
       def show
-        @account = Account.find_by(id: params[:id])
-        if (@account!=nil)
-          render json: @account, status: :ok
+        email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
+        user = User.find_by(email: email)
+        if ( user )
+          account = Account.find_by(id: params[:id], user_id: user["id"])
+          if ( account != nil )
+            render json: account, status: :ok
+          else
+            render json: :nothing, status: :unprocessable_entity
+          end
         else
-          render json: :nothing, status: :not_found
+          render json: :nothing, status: :unprocessable_entity
         end
       end
 
       # POST /accounts or /accounts.json
       def create
-        @account = Account.new(account_params)
-        
-        if @account.save
-          render json: @account, status: :created
-        else
-          render json: @account.errors, status: :unprocessable_entity
+        email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
         end
+
+        user = User.find_by(email: email)
+
+        if ( user )
+          user_id = user["id"]
+          balance = account_params["balance"] 
+          account = Account.new(user_id: user_id, balance: balance)
+
+          if account.save
+            render json: account, status: :created
+          else
+            render json: account.errors, status: :unprocessable_entity
+          end
+        else
+          render json: :nothing, status: :unprocessable_entity
+        end
+        
       end
 
       # PATCH/PUT /accounts/1 or /accounts/1.json
       def update
-        @account = Account.find(params[:id])
-  
-        if @account.update(account_params)
-          render json: @account, status: :ok
+        email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
+        user = User.find_by(email: email)
+        if ( user )
+          account = Account.find_by(user_id: user["id"], id: params[:id])
+          
+          if ( account == nil )
+            render json: :nothing, status: :unprocessable_entity
+            return
+          end
+
+          if account.update(account_params)
+            render json: account, status: :ok
+          else
+            render json: account.errors, status: :unprocessable_entity
+          end
         else
-          render json: @account.errors, status: :unprocessable_entity
+          render json: :nothing, status: :unprocessable_entity
         end
       end
 
       # DELETE /accounts/1 or /accounts/1.json
       def destroy
-        @account = Account.find(params[:id])
-        if @account.destroy
-          render json: :nothing, status: :ok
+        email = AuthenticationHelper::Auth.instance.getEmailFromJWT( request )
+        if ( email == nil )
+          render json: :nothing, status: :unprocessable_entity
+          return
+        end
+
+        user = User.find_by(email: email)
+        if ( user )
+          account = Account.find_by(user_id: user["id"], id: params[:id])
+          
+          if ( account == nil )
+            render json: :nothing, status: :unprocessable_entity
+            return
+          end
+
+
+          if account.destroy
+            render json: :nothing, status: :ok
+          else
+            render json: :nothing, status: :unprocessable_entity
+          end
         else
           render json: :nothing, status: :unprocessable_entity
         end

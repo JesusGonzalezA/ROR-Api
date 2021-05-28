@@ -7,8 +7,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :movements
       resources :accounts
+      
+      # Users
       resources :users, :only => [:create]
-
       get '/users', to: 'users#login'
       put '/users', to: 'users#update'
       patch '/users', to: 'users#update'
