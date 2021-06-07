@@ -1,7 +1,11 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  
+  test "Se puede borrar una cuenta con movimientos asociados a ella" do
+    account = accounts(:account_jesus)
+    
+    assert account.destroy
+  end
+
 end

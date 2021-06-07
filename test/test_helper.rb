@@ -4,10 +4,13 @@ require "rails/test_help"
 
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
-  parallelize(workers: :number_of_processors)
+  parallelize(workers: 1)
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def getApiRoute
+    return 'http://localhost:80/api/v1'
+  end
 end

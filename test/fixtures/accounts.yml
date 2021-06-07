@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  balance: 9.99
-  user: one
+account_jesus:
+  balance: 100
+  user: jesus
 
-two:
-  balance: 9.99
-  user: two
+account_alejandro:
+  balance: 100
+  user: alejandro
